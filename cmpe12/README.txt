@@ -1,0 +1,1 @@
+I, Dylan Sutro, have read and understood the CE12 syllabus and PersonalResponsibility Document.

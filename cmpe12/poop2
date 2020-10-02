@@ -1,0 +1,13 @@
+.data
+
+.text
+
+lw $t0, ($a1)
+
+mtc1 $t0, $f1
+cvt.s.w $f12, $f1
+li $v0, 2
+syscall
+
+li $v0, 10
+syscall
