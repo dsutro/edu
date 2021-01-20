@@ -7,6 +7,8 @@
 #include <iostream>
 #include <limits>
 #include <utility>
+#include<vector>
+
 using namespace std;
 
 #include "debug.h"
@@ -14,8 +16,8 @@ using namespace std;
 class ubigint {
    friend ostream& operator<< (ostream&, const ubigint&);
    private:
-      using unumber = unsigned long;
-      unumber uvalue {};
+      using ubigvalue_t = vector<uint8_t>;
+			ubigvalue_t ubigvalue;
    public:
       void multiply_by_2();
       void divide_by_2();

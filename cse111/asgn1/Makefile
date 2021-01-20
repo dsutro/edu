@@ -28,9 +28,12 @@ ${EXECBIN} : ${OBJECTS}
 	${COMPILECPP} -o $@ ${OBJECTS}
 
 %.o : %.cpp
-	- checksource $<
-	- cpplint.py.perl $<
+	# - checksource $<
+	# - cpplint.py.perl $<
 	${COMPILECPP} -c $<
+
+harness	:	harness.o ${MODULES:=.o}
+	${COMPILECPP} -o harness harness.o ${MODULES:=.o}
 
 ci : check
 	cid -is ${ALLSOURCES}

@@ -5,51 +5,113 @@
 #include <exception>
 #include <stack>
 #include <stdexcept>
+#include<string>
 using namespace std;
 
 #include "debug.h"
 #include "relops.h"
 #include "ubigint.h"
 
-ubigint::ubigint (unsigned long that): uvalue (that) {
-   DEBUGF ('~', this << " -> " << uvalue)
+ubigint::ubigint (unsigned long that) {
+   if (that < 10)	{
+      ubigvalue.push_back(that);
+   }else	{
+      uint8_t digit = 0;
+      while(that != 0)	{
+			   digit = that % 10;
+         ubigvalue.push_back(digit);
+         that = that / 10;
+      }
+   }
 }
 
-ubigint::ubigint (const string& that): uvalue(0) {
-   DEBUGF ('~', "that = \"" << that << "\"");
-   for (char digit: that) {
-      if (not isdigit (digit)) {
+ubigint::ubigint (const string& that) {
+   for (reverse_iterator digit=that.rbegin(); digit!=that.rend(); ++digit)	{
+      if (not isdigit (*digit)) {
          throw invalid_argument ("ubigint::ubigint(" + that + ")");
       }
-      uvalue = uvalue * 10 + digit - '0';
+			uint8_t num = *digit - '0';
+      ubigvalue.push_back(num);
    }
 }
 
 ubigint ubigint::operator+ (const ubigint& that) const {
-   DEBUGF ('u', *this << "+" << that);
-   ubigint result (uvalue + that.uvalue);
-   DEBUGF ('u', result);
+   ubigint result(); 
+
+   uint8_t carry = 0;
+   uint8_t rem = 0;
+   int sum = 0;
+   long unsigned int i = 0;
+
+   if (ubigvalue.size() != that.ubigvalue.size())	{
+      int pad = ubigvalue.size() - that.ubigvalue.size();
+      if (pad < 0)	{
+         //Add common digits
+         for (; i < that.ubigvalue.size(); i++)  {
+            sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
+            rem = sum % 10;
+            carry = sum / 10;
+            result.ubigvalue.push_back(rem);
+         }
+         //Loop through remaining digits
+         for (; i < ubigvalue.size(); i++)  {
+            sum = ubigvalue.at(i) + carry;
+            rem = sum % 10;
+            carry = sum / 10;
+            result.ubigvalue.push_back(rem);
+         }
+         if (carry)  {
+            result.ubigvalue.push_back(carry);
+         }
+      }else{	
+		     for (; i < ubigvalue.size(); i++)  {
+            sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
+            rem = sum % 10;
+            carry = sum / 10;
+            result.ubigvalue.push_back(rem);
+         }
+         //Loop through remaining digits
+         for (; i < that.ubigvalue.size(); i++)  {
+            sum = that.ubigvalue.at(i) + carry;
+            rem = sum % 10;
+            carry = sum / 10;
+            result.ubigvalue.push_back(rem);
+         }
+         if (carry)  {
+            result.ubigvalue.push_back(carry);
+         }
+      }	
+   }else	{
+      for (; i < ubigvalue.size(); i++)	{
+         sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
+         rem = sum % 10;
+         carry = sum / 10;
+			   result.ubigvalue.push_back(rem);
+      }
+      if (carry)	{
+         result.ubigvalue.push_back(carry);
+      }
+   }
    return result;
 }
 
 ubigint ubigint::operator- (const ubigint& that) const {
-   if (*this < that) throw domain_error ("ubigint::operator-(a<b)");
-   return ubigint (uvalue - that.uvalue);
+   return ubigint();
 }
 
 ubigint ubigint::operator* (const ubigint& that) const {
-   return ubigint (uvalue * that.uvalue);
+   return ubigint();
 }
 
 void ubigint::multiply_by_2() {
-   uvalue *= 2;
+   return;
 }
 
 void ubigint::divide_by_2() {
-   uvalue /= 2;
+   return;
 }
 
-
+
 struct quo_rem { ubigint quotient; ubigint remainder; };
 quo_rem udivide (const ubigint& dividend, const ubigint& divisor_) {
    // NOTE: udivide is a non-member function.
@@ -77,22 +139,25 @@ quo_rem udivide (const ubigint& dividend, const ubigint& divisor_) {
 }
 
 ubigint ubigint::operator/ (const ubigint& that) const {
-   return udivide (*this, that).quotient;
+	return ubigint();
 }
 
 ubigint ubigint::operator% (const ubigint& that) const {
-   return udivide (*this, that).remainder;
+	return ubigint();
 }
 
 bool ubigint::operator== (const ubigint& that) const {
-   return uvalue == that.uvalue;
+   return true;
 }
 
 bool ubigint::operator< (const ubigint& that) const {
-   return uvalue < that.uvalue;
+   return true;
 }
 
 ostream& operator<< (ostream& out, const ubigint& that) { 
-   return out << "ubigint(" << that.uvalue << ")";
+   for (auto iter = that.ubigvalue.rbegin(); iter != that.ubigvalue.rend(); ++iter) {
+        out << unsigned(*iter);
+   }
+   return out;
 }
 
