@@ -7,6 +7,7 @@
 using namespace std;
 
 #include "bigint.h"
+#include "ubigint.h"
 
 bigint::bigint (long that): uvalue (that), is_negative (that < 0) {
    DEBUGF ('~', this << " -> " << uvalue)
@@ -30,8 +31,36 @@ bigint bigint::operator- () const {
 }
 
 bigint bigint::operator+ (const bigint& that) const {
-   ubigint result = uvalue + that.uvalue;
-   return result;
+   if (is_negative and that.is_negative)	{
+			return {that.uvalue + uvalue, true}; 
+   }
+   if (not is_negative and not that.is_negative)  {
+      return {that.uvalue + uvalue, false}; 
+   }
+   if (is_negative and not that.is_negative)  {
+			if (uvalue == that.uvalue)	{
+         return {uvalue - that.uvalue, false}; 
+      } 
+      if (uvalue > that.uvalue)	{
+         return {uvalue - that.uvalue, true}; 
+      }
+      if (uvalue < that.uvalue)	{
+         return {that.uvalue - uvalue, false}; 
+      }
+   }
+   if (not is_negative and that.is_negative)  {
+      if (uvalue == that.uvalue)  {
+         return {uvalue - that.uvalue, false};
+      }
+      if (uvalue > that.uvalue) {
+         return {uvalue - that.uvalue, false}; 
+      }
+      if (uvalue < that.uvalue) {
+         return {that.uvalue - uvalue, true};
+      }
+   }
+	bigint empty;
+	return empty;
 }
 
 bigint bigint::operator- (const bigint& that) const {
@@ -39,7 +68,6 @@ bigint bigint::operator- (const bigint& that) const {
    return result;
 }
 
-
 bigint bigint::operator* (const bigint& that) const {
    bigint result = uvalue * that.uvalue;
    return result;
