@@ -282,8 +282,14 @@ bool ubigint::operator< (const ubigint& that) const {
 }
 
 ostream& operator<< (ostream& out, const ubigint& that) { 
+   int i = 0;
    for (auto iter = that.ubigvalue.rbegin(); iter != that.ubigvalue.rend(); ++iter) {
         out << unsigned(*iter);
+        i++;
+        if (i == 69)	{
+           i = 0;
+           out << "\\" << endl;
+        }
    }
    return out;
 }

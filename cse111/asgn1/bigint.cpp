@@ -43,8 +43,7 @@ bigint bigint::operator+ (const bigint& that) const {
       } 
       if (uvalue > that.uvalue)	{
          return {uvalue - that.uvalue, true}; 
-      }
-      if (uvalue < that.uvalue)	{
+      }else  {
          return {that.uvalue - uvalue, false}; 
       }
    }
@@ -54,8 +53,7 @@ bigint bigint::operator+ (const bigint& that) const {
       }
       if (uvalue > that.uvalue) {
          return {uvalue - that.uvalue, false}; 
-      }
-      if (uvalue < that.uvalue) {
+      }else  {
          return {that.uvalue - uvalue, true};
       }
    }
@@ -73,9 +71,9 @@ bigint bigint::operator- (const bigint& that) const {
          return {that.uvalue - uvalue, false};
       }
       if (uvalue > that.uvalue) {
+         cout << "Excellent\n";
          return {uvalue - that.uvalue, false};
-      }
-      if (uvalue < that.uvalue) {
+      }else  {
          return {that.uvalue - uvalue, true};
       }
    }
@@ -85,8 +83,7 @@ bigint bigint::operator- (const bigint& that) const {
       }
       if (uvalue > that.uvalue) {
          return {uvalue - that.uvalue, true};
-      }
-      if (uvalue < that.uvalue) {
+      }else  {
          return {that.uvalue - uvalue, false};
       }
    }
@@ -163,7 +160,6 @@ bool bigint::operator< (const bigint& that) const {
 }
 
 ostream& operator<< (ostream& out, const bigint& that) {
-   return out << "bigint(" << (that.is_negative ? "-" : "+")
-              << "," << that.uvalue << ")";
+   return out << (that.is_negative ? "-" : "") << that.uvalue;
 }
 
