@@ -71,7 +71,6 @@ bigint bigint::operator- (const bigint& that) const {
          return {that.uvalue - uvalue, false};
       }
       if (uvalue > that.uvalue) {
-         cout << "Excellent\n";
          return {uvalue - that.uvalue, false};
       }else  {
          return {that.uvalue - uvalue, true};

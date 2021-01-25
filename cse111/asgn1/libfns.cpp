@@ -20,13 +20,13 @@ bigint pow (const bigint& base_arg, const bigint& exponent_arg) {
       base = ONE / base;
       exponent = - exponent;
    }
-   while (exponent > ZERO) {
+   while (exponent > ZERO) { 
       if (exponent % TWO == ONE) {
          result = result * base;
          exponent = exponent - 1;
       }else {
          base = base * base;
-         exponent = exponent / 2;
+         exponent = exponent / TWO;
       }
    }
    DEBUGF ('^', "result = " << result);

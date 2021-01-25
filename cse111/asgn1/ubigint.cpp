@@ -13,6 +13,9 @@ using namespace std;
 #include "ubigint.h"
 
 ubigint::ubigint (unsigned long that) {
+   if (that == 0)	{
+      return;
+   }
    if (that < 10)	{
       ubigvalue.push_back(that);
    }else	{
@@ -34,7 +37,13 @@ ubigint::ubigint (const string& that) {
       ubigvalue.push_back(num);
    }
 }
+/*
+ubigint ubigint::ubigint(const ubigint& that)	{
+   for (int i =0; i < that.size(); i++)	{
 
+   }
+}
+*/
 ubigint ubigint::operator+ (const ubigint& that) const {
    ubigint result; 
 
@@ -175,43 +184,42 @@ ubigint ubigint::operator* (const ubigint& that) const {
 }
 
 void ubigint::multiply_by_2() {
-   *this = *this + *this;
+   //cout << "Before M2 " << *this << endl;
+   *this = *this * ubigint(2);
+   //cout << "Before M2 " << *this << endl;
 }
 
 void ubigint::divide_by_2() {
+   //cout << "Before D2 : " << *this << endl;
    if (ubigint(0) == *this)	{
       return;
    }
-   ubigint search;
    int size = ubigvalue.size() - 1;
    int index = size;
    int rem = 0;
 
    while (1)	{
-     uint8_t quo = 0;
-
+     int quo = 0;
      if (rem)	{
         quo = quo + rem;
         rem =0;
      }
 
-     quo = quo + (int(ubigvalue.at(index)) / 2);
+     quo = quo + (ubigvalue.at(index) / 2);
  
      if (ubigvalue.at(index) % 2)	{
         rem = 5;
      }
-
-     ubigvalue.at(index) = quo;
+     ubigvalue.at(index) = uint8_t(quo);
 		
-     index--;      
-
      if (index == 0)	{
         break;
-     } 
+     }
+     index--;      
 	 }
    while (ubigvalue.size() > 0 and ubigvalue.back() == 0) ubigvalue.pop_back();
+   //cout << "After D2 : " << *this << endl;
 }
-
 
 struct quo_rem { ubigint quotient; ubigint remainder; };
 quo_rem udivide (const ubigint& dividend, const ubigint& divisor_) {
@@ -227,7 +235,7 @@ quo_rem udivide (const ubigint& dividend, const ubigint& divisor_) {
       power_of_2.multiply_by_2();
    }
    while (power_of_2 > zero) {
-      if (divisor <= remainder) {
+      if (divisor == remainder || divisor < remainder) {
          remainder = remainder - divisor;
          quotient = quotient + power_of_2;
       }
@@ -260,11 +268,11 @@ bool ubigint::operator== (const ubigint& that) const {
    return true;
 }
 
-bool ubigint::operator< (const ubigint& that) const {
-   if (ubigvalue.size() == that.ubigvalue.size())	{
+bool ubigint::operator< (const ubigint& that) const { 
+  if (ubigvalue.size() == that.ubigvalue.size())	{
       for (long unsigned int i =0; i < ubigvalue.size(); i++) {
          if (ubigvalue.at(i) != that.ubigvalue.at(i)) {
-            if (ubigvalue.at(i) < ubigvalue.at(i))	{
+            if (ubigvalue.at(i) < that.ubigvalue.at(i))	{
                return true;
             }else	{
                return false;
@@ -273,7 +281,7 @@ bool ubigint::operator< (const ubigint& that) const {
       }
       return false;
    }else	{
-      if ((ubigvalue.size() - that.ubigvalue.size()) > 0)	{
+      if (ubigvalue.size() > that.ubigvalue.size())	{
          return false;
       }else	{
          return true;
