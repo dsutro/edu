@@ -22,7 +22,7 @@ ubigint::ubigint (unsigned long that) {
    }else  {
       uint8_t digit = 0;
       while(that != 0)  {
-			   digit = that % 10;
+         digit = that % 10;
          ubigvalue.push_back(digit);
          that = that / 10;
       }
@@ -30,11 +30,12 @@ ubigint::ubigint (unsigned long that) {
 }
 
 ubigint::ubigint (const string& that) {
-   for (reverse_iterator digit=that.rbegin(); digit!=that.rend(); ++digit) {
+   for (reverse_iterator digit=that.rbegin(); 
+        digit!=that.rend(); ++digit) {
       if (not isdigit (*digit)) {
          throw invalid_argument ("ubigint::ubigint(" + that + ")");
       }
-			uint8_t num = *digit - '0';
+      uint8_t num = *digit - '0';
       ubigvalue.push_back(num);
    }
 }
