@@ -13,15 +13,15 @@ using namespace std;
 #include "ubigint.h"
 
 ubigint::ubigint (unsigned long that) {
-   if (that == 0)	{
+   if (that == 0)  {
       ubigvalue.clear();
       return;
    }
-   if (that < 10)	{
+   if (that < 10)  {
       ubigvalue.push_back(that);
-   }else	{
+   }else  {
       uint8_t digit = 0;
-      while(that != 0)	{
+      while(that != 0)  {
 			   digit = that % 10;
          ubigvalue.push_back(digit);
          that = that / 10;
@@ -30,7 +30,7 @@ ubigint::ubigint (unsigned long that) {
 }
 
 ubigint::ubigint (const string& that) {
-   for (reverse_iterator digit=that.rbegin(); digit!=that.rend(); ++digit)	{
+   for (reverse_iterator digit=that.rbegin(); digit!=that.rend(); ++digit) {
       if (not isdigit (*digit)) {
          throw invalid_argument ("ubigint::ubigint(" + that + ")");
       }
@@ -38,13 +38,7 @@ ubigint::ubigint (const string& that) {
       ubigvalue.push_back(num);
    }
 }
-/*
-ubigint ubigint::ubigint(const ubigint& that)	{
-   for (int i =0; i < that.size(); i++)	{
 
-   }
-}
-*/
 ubigint ubigint::operator+ (const ubigint& that) const {
    ubigint result; 
 
@@ -57,14 +51,14 @@ ubigint ubigint::operator+ (const ubigint& that) const {
       int pad = ubigvalue.size() - that.ubigvalue.size();
       if (pad > 0)	{
          //Add common digits
-         for (; i < that.ubigvalue.size(); i++)  {
+         for (; i < that.ubigvalue.size(); i++) {
             sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
             rem = sum % 10;
             carry = sum / 10;
             result.ubigvalue.push_back(rem);
          }
          //Loop through remaining digits
-         for (; i < ubigvalue.size(); i++)  {
+         for (; i < ubigvalue.size(); i++) {
             sum = ubigvalue.at(i) + carry;
             rem = sum % 10;
             carry = sum / 10;
@@ -73,32 +67,32 @@ ubigint ubigint::operator+ (const ubigint& that) const {
          if (carry)  {
             result.ubigvalue.push_back(carry);
          }
-      }else{	
-		     for (; i < ubigvalue.size(); i++)  {
+      }else {	
+		     for (; i < ubigvalue.size(); i++) {
             sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
             rem = sum % 10;
             carry = sum / 10;
             result.ubigvalue.push_back(rem);
          }
          //Loop through remaining digits
-         for (; i < that.ubigvalue.size(); i++)  {
+         for (; i < that.ubigvalue.size(); i++) {
             sum = that.ubigvalue.at(i) + carry;
             rem = sum % 10;
             carry = sum / 10;
             result.ubigvalue.push_back(rem);
          }
-         if (carry)  {
+         if (carry) {
             result.ubigvalue.push_back(carry);
          }
       }	
-   }else	{
+   }else {
       for (; i < ubigvalue.size(); i++)	{
          sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
          rem = sum % 10;
          carry = sum / 10;
 			   result.ubigvalue.push_back(rem);
       }
-      if (carry)	{
+      if (carry) {
          result.ubigvalue.push_back(carry);
       }
    }
@@ -121,36 +115,36 @@ ubigint ubigint::operator- (const ubigint& that) const {
    long unsigned int i = 0;
 
    if (ubigvalue.size() != that.ubigvalue.size()) {
-      for (; i < that.ubigvalue.size(); i++)  {
+      for (; i < that.ubigvalue.size(); i++) {
          sum = ubigvalue.at(i) - that.ubigvalue.at(i) + carry;
          if (sum < 0) {
             rem = sum + 10;
             carry = -1;
-         }else  {
+         }else {
             carry = 0;
             rem = sum;
          }
          result.ubigvalue.push_back(rem);
       }
       //Loop through remaining digits
-      for (; i < ubigvalue.size(); i++)  {
+      for (; i < ubigvalue.size(); i++) {
          sum = ubigvalue.at(i) + carry;
          if (sum < 0) {
             rem = sum + 10;
             carry = -1;
-         }else  {
+         }else {
             carry = 0;
             rem = sum;
          }
          result.ubigvalue.push_back(rem);
       }
-   }else  {
+   }else {
       for (; i < ubigvalue.size(); i++) {
          sum = ubigvalue.at(i) - that.ubigvalue.at(i) + carry;
          if (sum < 0)	{
             rem = sum + 10;
             carry = -1;
-         }else	{
+         }else {
             carry = 0;
             rem = sum;
          }
@@ -166,10 +160,9 @@ ubigint ubigint::operator* (const ubigint& that) const {
    int alloc = ubigvalue.size() + that.ubigvalue.size();
    uint8_t zero = 0;
 
-   for (int i = 0; i < alloc; i++)	{
+   for (int i = 0; i < alloc; i++) {
       result.ubigvalue.push_back(zero);
    }
-
    for (long unsigned int outer = 0; outer < ubigvalue.size(); outer++)	{
       int carry = 0;
       for (long unsigned int inner = 0; inner < that.ubigvalue.size(); inner++)	{
@@ -185,10 +178,8 @@ ubigint ubigint::operator* (const ubigint& that) const {
 }
 
 void ubigint::multiply_by_2() {
-   //cout << "Before M2 " << *this << endl;
    *this = *this * ubigint(2);
    while (ubigvalue.size() > 0 and ubigvalue.back() == 0) ubigvalue.pop_back();
-   //cout << "After M2 " << *this << endl;
 }
 
 void ubigint::divide_by_2() {
@@ -206,7 +197,7 @@ void ubigint::divide_by_2() {
    int index = size;
    int rem = 0;
 
-   while (1)	{
+   while (1) {
      int quo = 0;
      if (rem)	{
         quo = quo + rem;
@@ -218,7 +209,7 @@ void ubigint::divide_by_2() {
      }
      ubigvalue.at(index) = uint8_t(quo);
 		
-     if (index == 0)	{
+     if (index == 0) {
         break;
      }
      index--;      
@@ -237,30 +228,16 @@ quo_rem udivide (const ubigint& dividend, const ubigint& divisor_) {
    ubigint quotient {0};
    ubigint remainder {dividend}; // left operand, dividend
    while (divisor < remainder) {
-      //cout << "divisor < remainder loop" << endl;
-      //cout << "remainder: " << remainder << endl;
-      //cout << "1divisor: " << divisor << endl;
-      //cout << "1power_of_2: " << power_of_2 << endl;
       divisor.multiply_by_2();
       power_of_2.multiply_by_2();
-      //cout << "2divisor: " << divisor << endl;
-      //cout << "2power_of_2: " << power_of_2 << endl;
    }
    while (power_of_2 > zero) {
-      //cout << "power_of_2 > zero" << endl;
-      //cout << "power_of_2 " << power_of_2 << endl;
       if (divisor <= remainder) {
-         //cout << "divisor <== remainder" << endl;
-         //cout << "divisor: " << divisor << " remainder: " << remainder << endl;
          remainder = remainder - divisor;
          quotient = quotient + power_of_2;
-         //cout << "quotient: " << quotient << " remainder: " << remainder << endl; 
       }
-      //cout << "divide divisor and power_of_2" << endl;
-      //cout << "divisor: " << divisor << " power_of_2: " << power_of_2 << endl;
       divisor.divide_by_2();
       power_of_2.divide_by_2();
-      //cout << "divisor: " << divisor << " power_of_2: " << power_of_2 << endl;
    }
    DEBUGF ('/', "quotient = " << quotient);
    DEBUGF ('/', "remainder = " << remainder);
@@ -276,27 +253,23 @@ ubigint ubigint::operator% (const ubigint& that) const {
 }
 
 bool ubigint::operator== (const ubigint& that) const {
-//cout << "compare this: " << *this << " and that: " << that << endl;
    if (ubigvalue.size() != that.ubigvalue.size()) {
-      //cout << "NEQ size" << endl;
       return false;
    }else	{
-      if (ubigvalue.size() == 0)  {
+      if (ubigvalue.size() == 0) {
          return true;
       }
       for (long unsigned int i =0; i < ubigvalue.size(); i++)	{
          if	(ubigvalue.at(i) != that.ubigvalue.at(i))	{
-            //cout << "NEQ index" << endl;
             return false;
          }
       }
    }
-   //cout << "EQ" << endl;
    return true;
 }
 
 bool ubigint::operator< (const ubigint& that) const { 
-  if (ubigvalue.size() == that.ubigvalue.size())	{
+  if (ubigvalue.size() == that.ubigvalue.size()) {
       if (ubigvalue.size() == 0)	{
          return false;
       }
@@ -324,7 +297,7 @@ ostream& operator<< (ostream& out, const ubigint& that) {
    for (auto iter = that.ubigvalue.rbegin(); iter != that.ubigvalue.rend(); ++iter) {
         out << unsigned(*iter);
         i++;
-        if (i == 69)	{
+        if (i == 69) {
            i = 0;
            out << "\\" << endl;
         }
