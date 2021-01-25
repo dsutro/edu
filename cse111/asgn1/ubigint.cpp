@@ -48,7 +48,7 @@ ubigint ubigint::operator+ (const ubigint& that) const {
    int sum = 0;
    long unsigned int i = 0;
 
-   if (ubigvalue.size() != that.ubigvalue.size())	{
+   if (ubigvalue.size() != that.ubigvalue.size()) {
       int pad = ubigvalue.size() - that.ubigvalue.size();
       if (pad > 0) {
          //Add common digits
@@ -87,7 +87,7 @@ ubigint ubigint::operator+ (const ubigint& that) const {
          }
       }
    }else {
-      for (; i < ubigvalue.size(); i++)	{
+      for (; i < ubigvalue.size(); i++) {
          sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
          rem = sum % 10;
          carry = sum / 10;
@@ -105,7 +105,7 @@ ubigint ubigint::operator+ (const ubigint& that) const {
 ubigint ubigint::operator- (const ubigint& that) const {
    ubigint result;
 
-   if (*this == that)	{
+   if (*this == that) {
       result.ubigvalue.clear();
       result.ubigvalue.push_back(0);
       return result;
@@ -143,7 +143,7 @@ ubigint ubigint::operator- (const ubigint& that) const {
    }else {
       for (; i < ubigvalue.size(); i++) {
          sum = ubigvalue.at(i) - that.ubigvalue.at(i) + carry;
-         if (sum < 0)	{
+         if (sum < 0) {
             rem = sum + 10;
             carry = -1;
          }else {
@@ -169,9 +169,10 @@ ubigint ubigint::operator* (const ubigint& that) const {
    for (long unsigned int outer = 0; outer < ubigvalue.size(); outer++)	{
       int carry = 0;
       for (long unsigned int inner = 0; 
-           inner < that.ubigvalue.size(); inner++)	{
+         inner < that.ubigvalue.size(); inner++) {
          int product = int(result.ubigvalue.at(inner + outer)) + 
-                       int(ubigvalue.at(outer)) * int(that.ubigvalue.at(inner)) + carry;
+                       int(ubigvalue.at(outer)) *
+                       int(that.ubigvalue.at(inner)) + carry;
          result.ubigvalue.at(inner + outer) = uint8_t(product % 10);
          carry = product / 10;
       }
@@ -202,7 +203,7 @@ void ubigint::divide_by_2() {
 
    while (1) {
      int quo = 0;
-     if (rem)	{
+     if (rem) {
         quo = quo + rem;
         rem =0;
      }
@@ -210,13 +211,12 @@ void ubigint::divide_by_2() {
      if (ubigvalue.at(index) % 2) {
         rem = 5;
      }
-     ubigvalue.at(index) = uint8_t(quo);
-		
+     ubigvalue.at(index) = uint8_t(quo);	
      if (index == 0) {
         break;
      }
      index--;      
-	 }
+   }
    while (ubigvalue.size() > 0 and ubigvalue.back() == 0) 
           ubigvalue.pop_back();
 }
@@ -248,17 +248,17 @@ quo_rem udivide (const ubigint& dividend, const ubigint& divisor_) {
 }
 
 ubigint ubigint::operator/ (const ubigint& that) const {
-	return udivide(*this, that).quotient;
+   return udivide(*this, that).quotient;
 }
 
 ubigint ubigint::operator% (const ubigint& that) const {
-	return udivide(*this, that).remainder;
+   return udivide(*this, that).remainder;
 }
 
 bool ubigint::operator== (const ubigint& that) const {
    if (ubigvalue.size() != that.ubigvalue.size()) {
       return false;
-   }else	{
+   }else {
       if (ubigvalue.size() == 0) {
          return true;
       }
