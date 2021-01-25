@@ -50,7 +50,7 @@ ubigint ubigint::operator+ (const ubigint& that) const {
 
    if (ubigvalue.size() != that.ubigvalue.size())	{
       int pad = ubigvalue.size() - that.ubigvalue.size();
-      if (pad > 0)	{
+      if (pad > 0) {
          //Add common digits
          for (; i < that.ubigvalue.size(); i++) {
             sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
@@ -68,8 +68,8 @@ ubigint ubigint::operator+ (const ubigint& that) const {
          if (carry)  {
             result.ubigvalue.push_back(carry);
          }
-      }else {	
-		     for (; i < ubigvalue.size(); i++) {
+      }else {
+         for (; i < ubigvalue.size(); i++) {
             sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
             rem = sum % 10;
             carry = sum / 10;
@@ -85,19 +85,20 @@ ubigint ubigint::operator+ (const ubigint& that) const {
          if (carry) {
             result.ubigvalue.push_back(carry);
          }
-      }	
+      }
    }else {
       for (; i < ubigvalue.size(); i++)	{
          sum = ubigvalue.at(i) + that.ubigvalue.at(i) + carry;
          rem = sum % 10;
          carry = sum / 10;
-			   result.ubigvalue.push_back(rem);
+         result.ubigvalue.push_back(rem);
       }
       if (carry) {
          result.ubigvalue.push_back(carry);
       }
    }
-   while (result.ubigvalue.size() > 0 and result.ubigvalue.back() == 0) result.ubigvalue.pop_back();
+   while (result.ubigvalue.size() > 0 and result.ubigvalue.back() == 0) 
+          result.ubigvalue.pop_back();
    return result;
 }
 
@@ -152,7 +153,8 @@ ubigint ubigint::operator- (const ubigint& that) const {
          result.ubigvalue.push_back(rem);
       }
    }
-   while (result.ubigvalue.size() > 0 and result.ubigvalue.back() == 0) result.ubigvalue.pop_back();
+   while (result.ubigvalue.size() > 0 and result.ubigvalue.back() == 0) 
+          result.ubigvalue.pop_back();
    return result;
 }
 
@@ -166,7 +168,8 @@ ubigint ubigint::operator* (const ubigint& that) const {
    }
    for (long unsigned int outer = 0; outer < ubigvalue.size(); outer++)	{
       int carry = 0;
-      for (long unsigned int inner = 0; inner < that.ubigvalue.size(); inner++)	{
+      for (long unsigned int inner = 0; 
+           inner < that.ubigvalue.size(); inner++)	{
          int product = int(result.ubigvalue.at(inner + outer)) + 
                        int(ubigvalue.at(outer)) * int(that.ubigvalue.at(inner)) + carry;
          result.ubigvalue.at(inner + outer) = uint8_t(product % 10);
@@ -174,25 +177,24 @@ ubigint ubigint::operator* (const ubigint& that) const {
       }
       result.ubigvalue.at(outer + that.ubigvalue.size()) = uint8_t(carry);
    }
-   while (result.ubigvalue.size() > 0 and result.ubigvalue.back() == 0) result.ubigvalue.pop_back();
+   while (result.ubigvalue.size() > 0 and result.ubigvalue.back() == 0)
+          result.ubigvalue.pop_back();
    return result;
 }
 
 void ubigint::multiply_by_2() {
    *this = *this * ubigint(2);
-   while (ubigvalue.size() > 0 and ubigvalue.back() == 0) ubigvalue.pop_back();
+   while (ubigvalue.size() > 0 and ubigvalue.back() == 0) 
+          ubigvalue.pop_back();
 }
 
 void ubigint::divide_by_2() {
-   //cout << "Before D2 : " << *this << endl;
-   if (ubigvalue.size() == 0)	{
-      //cout << "After D2 0: " << *this << endl;
+   if (ubigvalue.size() == 0) {
       return;
    }
-   if (ubigint(1) == *this)	{
+   if (ubigint(1) == *this) {
       ubigvalue.clear();
-      //cout << "After D2 1: " << *this << endl;
-			return;
+      return;
    }
    int size = ubigvalue.size() - 1;
    int index = size;
@@ -205,7 +207,7 @@ void ubigint::divide_by_2() {
         rem =0;
      }
      quo = quo + (ubigvalue.at(index) / 2);
-     if (ubigvalue.at(index) % 2)	{
+     if (ubigvalue.at(index) % 2) {
         rem = 5;
      }
      ubigvalue.at(index) = uint8_t(quo);
@@ -215,8 +217,8 @@ void ubigint::divide_by_2() {
      }
      index--;      
 	 }
-   while (ubigvalue.size() > 0 and ubigvalue.back() == 0) ubigvalue.pop_back();
-   //cout << "After D2 : " << *this << endl;
+   while (ubigvalue.size() > 0 and ubigvalue.back() == 0) 
+          ubigvalue.pop_back();
 }
 
 struct quo_rem { ubigint quotient; ubigint remainder; };
@@ -260,8 +262,8 @@ bool ubigint::operator== (const ubigint& that) const {
       if (ubigvalue.size() == 0) {
          return true;
       }
-      for (long unsigned int i =0; i < ubigvalue.size(); i++)	{
-         if	(ubigvalue.at(i) != that.ubigvalue.at(i))	{
+      for (long unsigned int i =0; i < ubigvalue.size(); i++) {
+         if (ubigvalue.at(i) != that.ubigvalue.at(i)) {
             return false;
          }
       }
@@ -271,23 +273,23 @@ bool ubigint::operator== (const ubigint& that) const {
 
 bool ubigint::operator< (const ubigint& that) const { 
   if (ubigvalue.size() == that.ubigvalue.size()) {
-      if (ubigvalue.size() == 0)	{
+      if (ubigvalue.size() == 0) {
          return false;
       }
       for (int i = ubigvalue.size()-1; i >= 0; i--) {
          if (ubigvalue.at(i) != that.ubigvalue.at(i)) {
             if (ubigvalue.at(i) < that.ubigvalue.at(i))	{
                return true;
-            }else	{
+            }else {
                return false;
             }
          }
       }
       return false;
-   }else	{
-      if (ubigvalue.size() > that.ubigvalue.size())	{
+   }else {
+      if (ubigvalue.size() > that.ubigvalue.size()) {
          return false;
-      }else	{
+      }else {
          return true;
       }
    }
