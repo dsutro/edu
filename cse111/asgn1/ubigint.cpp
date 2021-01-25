@@ -14,6 +14,7 @@ using namespace std;
 
 ubigint::ubigint (unsigned long that) {
    if (that == 0)	{
+      ubigvalue.clear();
       return;
    }
    if (that < 10)	{
@@ -186,13 +187,20 @@ ubigint ubigint::operator* (const ubigint& that) const {
 void ubigint::multiply_by_2() {
    //cout << "Before M2 " << *this << endl;
    *this = *this * ubigint(2);
-   //cout << "Before M2 " << *this << endl;
+   while (ubigvalue.size() > 0 and ubigvalue.back() == 0) ubigvalue.pop_back();
+   //cout << "After M2 " << *this << endl;
 }
 
 void ubigint::divide_by_2() {
    //cout << "Before D2 : " << *this << endl;
-   if (ubigint(0) == *this)	{
+   if (ubigvalue.size() == 0)	{
+      //cout << "After D2 0: " << *this << endl;
       return;
+   }
+   if (ubigint(1) == *this)	{
+      ubigvalue.clear();
+      //cout << "After D2 1: " << *this << endl;
+			return;
    }
    int size = ubigvalue.size() - 1;
    int index = size;
@@ -204,9 +212,7 @@ void ubigint::divide_by_2() {
         quo = quo + rem;
         rem =0;
      }
-
      quo = quo + (ubigvalue.at(index) / 2);
- 
      if (ubigvalue.at(index) % 2)	{
         rem = 5;
      }
@@ -231,16 +237,30 @@ quo_rem udivide (const ubigint& dividend, const ubigint& divisor_) {
    ubigint quotient {0};
    ubigint remainder {dividend}; // left operand, dividend
    while (divisor < remainder) {
+      //cout << "divisor < remainder loop" << endl;
+      //cout << "remainder: " << remainder << endl;
+      //cout << "1divisor: " << divisor << endl;
+      //cout << "1power_of_2: " << power_of_2 << endl;
       divisor.multiply_by_2();
       power_of_2.multiply_by_2();
+      //cout << "2divisor: " << divisor << endl;
+      //cout << "2power_of_2: " << power_of_2 << endl;
    }
    while (power_of_2 > zero) {
-      if (divisor == remainder || divisor < remainder) {
+      //cout << "power_of_2 > zero" << endl;
+      //cout << "power_of_2 " << power_of_2 << endl;
+      if (divisor <= remainder) {
+         //cout << "divisor <== remainder" << endl;
+         //cout << "divisor: " << divisor << " remainder: " << remainder << endl;
          remainder = remainder - divisor;
          quotient = quotient + power_of_2;
+         //cout << "quotient: " << quotient << " remainder: " << remainder << endl; 
       }
+      //cout << "divide divisor and power_of_2" << endl;
+      //cout << "divisor: " << divisor << " power_of_2: " << power_of_2 << endl;
       divisor.divide_by_2();
       power_of_2.divide_by_2();
+      //cout << "divisor: " << divisor << " power_of_2: " << power_of_2 << endl;
    }
    DEBUGF ('/', "quotient = " << quotient);
    DEBUGF ('/', "remainder = " << remainder);
@@ -256,21 +276,31 @@ ubigint ubigint::operator% (const ubigint& that) const {
 }
 
 bool ubigint::operator== (const ubigint& that) const {
+//cout << "compare this: " << *this << " and that: " << that << endl;
    if (ubigvalue.size() != that.ubigvalue.size()) {
+      //cout << "NEQ size" << endl;
       return false;
    }else	{
+      if (ubigvalue.size() == 0)  {
+         return true;
+      }
       for (long unsigned int i =0; i < ubigvalue.size(); i++)	{
          if	(ubigvalue.at(i) != that.ubigvalue.at(i))	{
+            //cout << "NEQ index" << endl;
             return false;
          }
       }
    }
+   //cout << "EQ" << endl;
    return true;
 }
 
 bool ubigint::operator< (const ubigint& that) const { 
   if (ubigvalue.size() == that.ubigvalue.size())	{
-      for (long unsigned int i =0; i < ubigvalue.size(); i++) {
+      if (ubigvalue.size() == 0)	{
+         return false;
+      }
+      for (int i = ubigvalue.size()-1; i >= 0; i--) {
          if (ubigvalue.at(i) != that.ubigvalue.at(i)) {
             if (ubigvalue.at(i) < that.ubigvalue.at(i))	{
                return true;
