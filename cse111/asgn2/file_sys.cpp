@@ -126,7 +126,10 @@ file_type plain_file::type() const {
 }
 
 size_t plain_file::size() const {
-   size_t size = data.size();
+   int size = data.size() - 1;
+   for(string word : data) {
+      size = size + word.length();
+   }
    DEBUGF ('i', "size = " << size);
    return size;
 }
@@ -234,7 +237,11 @@ ostream& operator<< (ostream& out, const directory& dir) {
    for(map<string, inode_ptr>::const_iterator iter = dir.dirents.begin(); iter != dir.dirents.end(); iter++) {
       out << setw(5) << iter->second->get_inode_nr();
       out << setw(5) << iter->second->size();
-      out << setw(10) << iter->first << endl;
+      out << setw(10) << iter->first; 
+      if (iter->second->type() == file_type::DIRECTORY_TYPE) {
+         cout << "/";
+      }
+      cout << endl;
    }
    return out;
 }
