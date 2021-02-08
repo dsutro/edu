@@ -30,8 +30,10 @@ inode_state::inode_state() {
    cwd = root;
 
    //Set . and ..
-   root->contents->get_dirents().insert(pair<string, inode_ptr>(".", root));
-   root->contents->get_dirents().insert(pair<string, inode_ptr>("..", root));
+   root->contents->get_dirents()
+        .insert(pair<string, inode_ptr>(".", root));
+   root->contents->get_dirents()
+        .insert(pair<string, inode_ptr>("..", root));
 }
 
 inode_ptr inode_state::get_root()	{
@@ -188,8 +190,10 @@ inode_ptr directory::mkdir (const string& dirname) {
       inode_ptr dir_cur = dirents.at(".");
       //Update dirents for cwd and created dir
       dirents.insert(pair<string, inode_ptr>(dirname, dir_ptr));
-      dir_ptr->get_contents()->get_dirents().insert(pair<string, inode_ptr>(".", dir_ptr));
-      dir_ptr->get_contents()->get_dirents().insert(pair<string, inode_ptr>("..", dir_cur));
+      dir_ptr->get_contents()->get_dirents()
+             .insert(pair<string, inode_ptr>(".", dir_ptr));
+      dir_ptr->get_contents()->get_dirents()
+             .insert(pair<string, inode_ptr>("..", dir_cur));
    }
    return dir_ptr;
 }
@@ -234,7 +238,8 @@ ostream& operator<< (ostream& out, const inode& inode) {
 }
 
 ostream& operator<< (ostream& out, const directory& dir) {
-   for(map<string, inode_ptr>::const_iterator iter = dir.dirents.begin(); iter != dir.dirents.end(); iter++) {
+   for(map<string, inode_ptr>::const_iterator iter 
+       = dir.dirents.begin(); iter != dir.dirents.end(); iter++) {
       out << setw(5) << iter->second->get_inode_nr();
       out << setw(5) << iter->second->size();
       out << setw(10) << iter->first; 

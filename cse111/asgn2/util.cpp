@@ -53,13 +53,14 @@ wordvec split (const string& line, const string& delimiters) {
    return words;
 }
 
-wordvec join (wordvec vec, bool from_root)	{
+wordvec join (wordvec vec, bool from_root) {
    string combined;
    wordvec combined_vec;
    if(from_root) {
       combined += "/";
    }
-   for(wordvec::iterator iter = vec.begin(); iter != vec.end(); iter++) {
+   for(wordvec::iterator iter = vec.begin(); 
+                iter != vec.end(); iter++) {
       combined = combined + *iter + "/";
    }
    combined_vec.push_back(combined);
