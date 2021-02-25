@@ -94,11 +94,9 @@ int main(int argc, char** argv) {
             auto key = result[1];
             auto value = result[2];
             if(key != "" and value != "") {
-               //cout << "set key value" << endl;
                cout << key << " = " << value << endl;
                map.insert(str_str_pair(key, value));
             }else if (key != "" and value == "") {
-               //cout << "search by key" << endl;
                auto search = map.find(key);
                if(search != map.end()) {
                   map.erase(search);
@@ -106,22 +104,20 @@ int main(int argc, char** argv) {
                   cout << key << ": key not found" << endl;
                }
             }else if (key == "" and value != "") {
-               //cout << "search by value" << endl;
                for(auto iter = map.begin(); iter != map.end(); ++iter) {
                   if(iter->second == value) {
                      cout << iter->first << " = " << value << endl;
                   }
                }
             }else if (key == "" and value == "") {
-               //cout << "print dict" << endl;
-               for (auto iter = map.begin(); iter != map.end(); ++iter) {
+               for (auto iter = map.begin(); 
+                    iter != map.end(); ++iter) {
                   cout << iter->first << " = " << iter->second << endl;
                }
             }else {
-               //cout << "error" << endl;
+               complain();
             }
          }else if (regex_search (line, result, trimmed_regex)) {
-            //cout << "search by key" << endl;
             auto key = result[1];
             auto search = map.find(key);
             if(search != map.end()) {
@@ -141,7 +137,8 @@ int main(int argc, char** argv) {
                if (cin.eof()) break;
                line_num++;
                sanitize(line);
-               cout << fname << ": " << line_num << ": " << line << endl;
+               cout << fname << ": " << line_num << 
+               ": " << line << endl;
                if (regex_search (line, result, comment_regex)) {
                   continue;
                }
@@ -149,12 +146,10 @@ int main(int argc, char** argv) {
                   auto key = result[1];
                   auto value = result[2];
                   if(key != "" and value != "") {
-                     //cout << "set key value" << endl;
                      cout << key << " = " << value << endl;
                      str_str_pair pair(result[1], result[2]);
                      map.insert(pair);
                   }else if (key != "" and value == "") {
-                     //cout << "search by key" << endl;
                      auto search = map.find(key);
                      if(search != map.end()) {
                         map.erase(search);
@@ -162,22 +157,23 @@ int main(int argc, char** argv) {
                         cout << key << ": key not found" << endl;
                      }
                   }else if (key == "" and value != "") {
-                     //cout << "search by value" << endl;
-                     for(auto iter = map.begin(); iter != map.end(); ++iter) {
+                     for(auto iter = map.begin(); 
+                              iter != map.end(); ++iter) {
                         if(iter->second == value) {
-                           cout << iter->first << " = " << value << endl;
+                           cout << iter->first << " = " << 
+                                   value << endl;
                         }
                      }
                   }else if (key == "" and value == "") {
-                     //cout << "print dict" << endl;
-                     for (auto iter = map.begin(); iter != map.end(); ++iter) {
-                        cout << iter->first << " = " << iter->second << endl;
+                     for (auto iter = map.begin(); 
+                               iter != map.end(); ++iter) {
+                        cout << iter->first << " = " << 
+                                iter->second << endl;
                      }
                   }else {
-                     //cout << "error" << endl;
+                     complain();
                   }
                }else if (regex_search (line, result, trimmed_regex)) {
-                  //cout << "search by key" << endl;
                   auto key = result[1];
                   auto search = map.find(key);
                   if(search != map.end()) {
@@ -191,13 +187,15 @@ int main(int argc, char** argv) {
             //file
             ifstream infile (fname);
             if (infile.fail()) {
-               complain() << fname << ": " << "No such file or directory" << endl;
+               complain() << fname << ": " << 
+               "No such file or directory" << endl;
             }else {
                while(getline(infile, line)) {
                   if (infile.eof()) break;
                   line_num++;
                   sanitize(line);
-                  cout << fname << ": " << line_num << ": " << line << endl;
+                  cout << fname << ": " << line_num << 
+                                   ": " << line << endl;
                   if (regex_search (line, result, comment_regex)) {
                      continue;
                   }
@@ -205,12 +203,10 @@ int main(int argc, char** argv) {
                      auto key = result[1];
                      auto value = result[2];
                      if(key != "" and value != "") {
-                        //cout << "set key value" << endl;
                         cout << key << " = " << value << endl;
                         str_str_pair pair(result[1], result[2]);
                         map.insert(pair);
                      }else if (key != "" and value == "") {
-                        //cout << "search by key" << endl;
                         auto search = map.find(key);
                         if(search != map.end()) {
                            map.erase(search);
@@ -218,22 +214,24 @@ int main(int argc, char** argv) {
                            cout << key << ": key not found" << endl;
                         }
                      }else if (key == "" and value != "") {
-                        //cout << "search by value" << endl;
-                        for(auto iter = map.begin(); iter != map.end(); ++iter) {
+                        for(auto iter = map.begin(); 
+                                 iter != map.end(); ++iter) {
                            if(iter->second == value) {
-                              cout << iter->first << " = " << value << endl;
+                              cout << iter->first << " = " << 
+                              value << endl;
                            }
                         }
                      }else if (key == "" and value == "") {
-                        //cout << "print dict" << endl;
-                        for (auto iter = map.begin(); iter != map.end(); ++iter) {
-                           cout << iter->first << " = " << iter->second << endl;
+                        for (auto iter = map.begin(); 
+                                  iter != map.end(); ++iter) {
+                           cout << iter->first << " = " << 
+                                   iter->second << endl;
                         }
                      }else {
-                        //cout << "error" << endl;
+                        complain();
                      }
-                  }else if (regex_search (line, result, trimmed_regex)) {
-                     //cout << "search by key" << endl;
+                  }else if (regex_search (line, 
+                            result, trimmed_regex)) {
                      auto key = result[1];
                      auto search = map.find(key);
                      if(search != map.end()) {
