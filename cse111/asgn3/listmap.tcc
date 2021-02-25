@@ -19,7 +19,7 @@ listmap<key_t,mapped_t,less_t>::~listmap() {
    while(not empty()) {
       erase(begin());
    }
-   //erase anchor
+   
 }
 
 //
@@ -45,45 +45,7 @@ listmap<key_t,mapped_t,less_t>::insert (const value_type& pair) {
    insertNode->next->prev = insertNode;
    return iterator(insertNode);
 }
-/*
-   if(empty()) {
-      node *insertNode = new node(anchor(), anchor(), pair);
-      anchor()->next = insertNode;
-      anchor()->prev = insertNode;
-      return insertNode;
-   }else {
-      iterator iter = find(pair.first); 
-      if(iter != end()) {
-         iter.where->value.second = pair.second;
-         return iter;
-      }else {
-         iter = begin();
-         while(less(iter.where->value.first, pair.first) and iter != end()) {
-            ++iter; 
-         }
-         if (iter != end()) {
-            node *insertNode = new node(iter.where, iter.where->prev, pair);  
-            insertNode->next->prev = insertNode;
-            insertNode->prev->next = insertNode;
-            return insertNode;
-         }
-         
 
-
-         node *iterNode = anchor()->next;
-         while(less(iterNode->value.first, pair.first) and iterNode->next != anchor()) {
-            iterNode = iterNode->next;
-         }
-         node *insertNode = new node(iterNode, iterNode->prev, pair);
-         iterNode->prev->next = insertNode;
-         iterNode->prev = insertNode;
-         return insertNode;
-
-      }
-   }
-   return iterator();
-}
-*/
 
 //
 // listmap::find(const key_type&)
@@ -94,7 +56,9 @@ listmap<key_t,mapped_t,less_t>::find (const key_type& that) {
    DEBUGF ('l', that);
 
    node *iterNode = anchor()->next;
-   while(iterNode != anchor() and iterNode->value.first != that) {
+   while(iterNode != anchor() and 
+        (less(iterNode->value.first, that) or 
+         less(that, iterNode->value.first))) {
       iterNode = iterNode->next;
    }
    return iterNode;
