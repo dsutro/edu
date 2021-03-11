@@ -63,7 +63,8 @@ void reply_put(accepted_socket& client_sock, cxi_header& header) {
       outlog << "sending header " << header << endl;
       send_packet(client_sock, &header, sizeof header);
    }else {
-      outlog << "cxid: FILE ERROR: coult not open " << header.filename << endl;
+      outlog << "cxid: FILE ERROR: coult not open " 
+             << header.filename << endl;
       header.command = cxi_command::NAK;
       memset (header.filename, 0, FILENAME_SIZE);
       send_packet(client_sock, &header, sizeof header);
@@ -83,11 +84,13 @@ void reply_get(accepted_socket& client_sock, cxi_header& header) {
       header.command = cxi_command::FILEOUT;
       header.nbytes = size;
       outlog << "sending header " << header << endl;
-      outlog << "file data: " << file_data << endl << "file size: " << size << endl;
+      outlog << "file data: " << file_data << endl 
+             << "file size: " << size << endl;
       send_packet(client_sock, &header, sizeof header);
       send_packet(client_sock, file_data, size);
    }else {
-      outlog << "cxid_get: FILE ERROR: " << header.filename << " could not be opened" << endl;
+      outlog << "cxid_get: FILE ERROR: " << header.filename 
+             << " could not be opened" << endl;
    }
    file_stream.close();
 }

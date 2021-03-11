@@ -63,7 +63,8 @@ void cxi_ls (client_socket& server) {
 
 void cxi_put(client_socket& server, string filename) {
    if (filename.size() > FILENAME_SIZE) {
-      outlog << "cxi_put: FILE ERROR: " << filename << " is too large" << endl;
+      outlog << "cxi_put: FILE ERROR: " << filename 
+             << " is too large" << endl;
       return; 
    }
    cxi_header header;
@@ -81,7 +82,8 @@ void cxi_put(client_socket& server, string filename) {
       file_stream.read(file_data, size); 
       header.nbytes = size;
       outlog << "sending header " << header << endl;
-      outlog << "file data: " << file_data << endl << "file size: " << size << endl;
+      outlog << "file data: " << file_data << endl 
+             << "file size: " << size << endl;
       send_packet(server, &header, sizeof header);
       send_packet(server, file_data, size);
       recv_packet(server, &header, sizeof header);
@@ -89,19 +91,22 @@ void cxi_put(client_socket& server, string filename) {
       outlog << "receiving header " << header << endl;
 
       if (header.command == cxi_command::ACK) {
-         outlog << "PUT successfull, " << filename << " has been added to the server directory." << endl;
+         outlog << "PUT successfull, " << filename 
+                << " has been added to the server directory." << endl;
       }else {
          outlog << "PUT unsuccessfull." << endl;
       } 
    }else {
-      outlog << "cxi_put: FILE ERROR: " << filename << " could not be opened" << endl;
+      outlog << "cxi_put: FILE ERROR: " << filename 
+             << " could not be opened" << endl;
    }
    file_stream.close();
 }
 
 void cxi_get(client_socket& server, string filename) {
    if (filename.size() > FILENAME_SIZE) {
-      outlog << "cxi_get: FILE ERROR: " << filename << " is too large" << endl;
+      outlog << "cxi_get: FILE ERROR: " 
+             << filename << " is too large" << endl;
       return;
    }
    cxi_header header;
@@ -124,13 +129,15 @@ void cxi_get(client_socket& server, string filename) {
       file_stream.write(file_data, header.nbytes);
       file_stream.close();
    }else {
-      outlog << "cxi_get: FILE ERROR: could not get " << filename << endl;
+      outlog << "cxi_get: FILE ERROR: could not get " 
+             << filename << endl;
    }
 }
 
 void cxi_rm(client_socket& server, string filename) {
    if (filename.size() > FILENAME_SIZE) {
-      outlog << "cxi_put: FILE ERROR: " << filename << " is too large" << endl;
+      outlog << "cxi_put: FILE ERROR: " 
+             << filename << " is too large" << endl;
       return;
    }
    cxi_header header;
@@ -217,5 +224,4 @@ int main (int argc, char** argv) {
    }
    outlog << "finishing" << endl;
    return 0;
-}
-	
+}	
